@@ -1,0 +1,253 @@
+//  sample.asm code
+ 1: 
+ 2:        .data
+ 3: A:     .word 10 : 2, 5    # Another comment
+ 4: 
+ 5:        .text
+ 6: 
+ 7: main:  lw $s1, A
+ 8: top1:
+ 9: top2:  beq $s1, $zero, done  # A simple loop
+10:          abs $s1, $s2
+11:          addi $s1, $s1, -1
+12:        j top1
+13: done:  nop
+14:
+//   
+
+
+// txt-source
+// process-source
+
+{  source: [
+  { line:  2, text: "       .data"},
+	{ line:  3, text: "A:     .word 10 : 2, 5   # Another comment"},
+	{ line:  5, text: "       .text"},
+	{ line:  7, text: "main:  lb $s1, A"},
+	{ line:  8, text: "top1:"}
+	{ line:  9, text: "top2:  beq $s1, $zero, done  # A simple loop"},
+	{ line: 10, text: "         abs $s1, $s2"},
+	{ line: 11, text: "         addi $s1, $s1, -1"},
+	{ line: 12, text: "       j top1"},
+	{ line: 13, text: "done:  nop"},
+  ]
+}
+
+// syntax-source
+//   At this point the output is syntacally correct.  
+//   The op is known with the correct number of arguments.
+//   Each of the arguements are correct with respect to syntax and base values (e.g., it is a valid register)
+//   All args are either:  a reference to a register, an integer, or a label
+//    If the offset is a label with an offset it is in the form of 'A+5'
+
+{ program: "sample.asm", 
+   labels: [
+      { line:  3, segment: ".data", "A" },
+      { line:  7, segment: ".text", label: "main", address: null, refs: [] },
+      { line:  8, segment: ".text", label: "top1", address: null, refs: [] },
+      { line:  9, segment: ".text", label: "top2", address: null, refs: [] },
+      { line: 13, segment: ".text", label: "done", address: null, refs: [] }
+   ]
+
+   segments: [
+      { segment: ".data", comments: null, declarations: [
+           { line:   3, labels: [ "A" ],   op: ".word",   values: [ { value: 10, count: 2}, { value: 5, count: 1},], comment: "# Another comment" }
+                memory: [ { address: 0x0040 0000, value: 0},   // for 10 :1
+                          { address: 0x0040 0001, value: 0},
+                          { address: 0x0040 0002, value: 0},
+                          { address: 0x0040 0003, value: 10},
+
+
+
+
+      ]},
+      { segment: ".text", comments: null, instructions: [
+ 	         { line:   7, labels: [ "main" ],  syntax: "memory direct 2", command: [ "lb", "$s1", "A" ],               comment: null },
+ 	         { line:   8, labels: [ "top1" ],  syntax: null,              command: null,  comment: null },
+	         { line:   9, labels: [ "top2" ],  syntax: "register 3",      command: [ "beq",  "$s1", "$zero", "done" ], comment: "# A simple loop" },
+	         { line:  10, labels: null,        syntax: "register 2",      command: [ "abs",  "$s1", "$s2" ],           comment: null },
+	         { line:  11, labels: null,        syntax: "register 3",      command: [ "addi", "$s1", "$s1" ],           comment: null },
+           { line:  12, labels: null,        syntax: "register 1",      command: [ "j",    "top1" ],                 comment: null },
+           { line:  13, labels: [ "done" ],  syntax: "register 0",      command: [ "nop" ],                          comment: null },
+      ]}
+  ],
+ 
+}
+
+// LINE 7:  syntax:  memory direct
+
+           { line:   7, labels: [ "main" ],  syntax: "memory direct 2", command: [ "lb", "$s1", "A" ],            
+          type: "pseudo",
+          encoding: [ { command: ["lui", "$at", "upper(%2)"],        type: "native", encoding: { format: "I", opcode: 0x0f, rs: 0x00, rt: "%1",    imm: "%2" } },
+                      { command: ["lw",  "%1", "lower(%2)", "$at" ], type: "native", encoding: { format: "I", opcode: 0x23, rs: "%3", rt: "%1",    imm: "%2" } } ] },  comment: "" },
+          
+
+
+
+
+/////
+
+
+ {                line:  10, label: "",             command: { syntax: "register 2",  op: "abs",  argc: 2, args: [ "$s1", "$s2"]           },  comment: "" },
+
+
+ { address:  TBD, line:  10, label: "", 
+      command: { syntax: "register 2",  op: "abs",  argc: 2, args: [ "$s1", "$s2"]           }, 
+      count: 3, encoding:[ { command: { mnemonic: "sra", one: "$at", two: "#2", three: "0x1F" }, encoding: {} }
+                           { command: { mnemonic: "xor", one: "#1", two: "$at", three: "#2" },   encoding: {} }
+                           { command: { mnemonic: "subu", one: "#1", two: "#1", three: "$at" },  encoding: {} } ],
+comment: "" }
+
+
+{ address:  TBD, line:  10, label: "", command: [ "abs", "$s1", "$s2"]  , 
+      count: 3, encoding:[ { command: [ "sra",  "$at", "#2",  "0x1F" }, encoding: {} }
+                           { command: [ "xor",  "%1",  "$at", "#2" },   encoding: {} }
+                           { command: [ "subu", "%1",  "%1",  "$at" },  encoding: {} } ],
+comment: "" }
+
+
+{ format: "P", unit: "CPU", classification: "arithmetic", mnemonic: "abs",  count: 3, commands: [ { command: { mnemonic: "sra", one: "$at", two: "#2", three: "0x1F" }, encoding: {} }
+                                                                                                  { command: { mnemonic: "xor", one: "#1", two: "$at", three: "#2" }, encoding: {} }
+                                                                                                  { command: { mnemonic: "subu", one: "#1", two: "#1", three: "$at" }, encoding: {} } ],
+                                                                                                  comment: ""  }
+
+   
+////
+
+
+
+
+ { address: TBD, line:  12, label: "",  command: [ "j", "top1"],  
+      count: 1, encoding: [ { format: "J",  opcode: 0x02, address: "top1" } } ].
+      comment: "" 
+  },
+
+
+
+  { unit: "CPU",  classification: "control-flow", mnemonic: "j", argc: 1, encoding: { format: "J",  opcode: 0x02, address: "#1" }, 
+                  syntax: "j address",   tac: "goto address",               description: "Jump to address within the current 256 MB-aligned region"},
+
+
+
+
+// Memory-overlay:  This is equivalent to the core file
+
+Use the syntax-source and the instruction-mapping to define the .text segment overlay.
+Use the .text overlay to generate memory
+Then you can generate the labels
+Then you can back patch the label values
+
+
+Use the text overlay to drive the apps and the apps
+
+// For the data segment, Each byte is assigned an initial value in the range of 0.. 2^8-1
+// The endianness is always in network, i.e., word: {0, 1, 2, 3}
+// unitsize indicates number of bytes used to encode each "value"
+// address is the actual address, the start address of the segment can be used to realign everythign when necessary.
+
+
+{ program: "sample.asm", 
+  state: { registers: PC, NPC, HI, LO, etc},
+  labels: [
+   { line:  3, segment: "data", label: "A" },
+   { line:  7, segment: "text", label: "main", address: TBD },
+   { line:  8, segment: "text", label: "top1", address: TBD },
+   { line:  9, segment: "text", label: "top2", address: TBD },
+   { line: 13, segment: "text", label: "done", address: TBD } ],
+  memory_overlay: [
+   { segment: ".data", alignment: "off", unitsize: 1, endianness": "network", start: 0x0040 0000, size: N, values: [
+     { address: 0x0040 0000, size: 4, count: 0, line: 3, labels: [ "A" ],  "op": ".word",  value: 0},   // for 10 :1
+     { address: 0x0040 0001, size: 4, count: 1, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 0002, size: 4, count: 2, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 0003, size: 4, count: 3, line: 3, labels: [],       "op": ".word",  value: 10},
+     { address: 0x0040 0004, size: 4, count: 0, line: 3, labels: [],       "op": ".word",  value: 0},   // for 10: 2
+     { address: 0x0040 0005, size: 4, count: 1, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 0006, size: 4, count: 2, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 0007, size: 4, count: 3, line: 3, labels: [],       "op": ".word",  value: 10},
+     { address: 0x0040 0008, size: 4, count: 0, line: 3, labels: [],       "op": ".word",  value: 0},   // for 5 : 1
+     { address: 0x0040 0009, size: 4, count: 1, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 000a, size: 4, count: 2, line: 3, labels: [],       "op": ".word",  value: 0},
+     { address: 0x0040 000b, size: 4, count: 3, line: 3, labels: [],       "op": ".word",  value: 5}
+    ]
+   },
+   {segment: ".text", alignment: "on", unitsize: 4, endianness: "?big", start: 0x0040 0000, size: N, values: [
+     { address: 0x0040 0000, size: 1, line:  7, labels: ["main"],            
+          command: [ "lw",  "$s1", "A" ], format: "I",  opcode: 0x23, rs: "#3", rt: "#1", imm: "#2"},     // the above is going to be a Psuedo instruction...  
+
+	   { address: 0x0040 0004, size: 1, line:  9, labels: ["top1" , "top2" ],  
+           command: [ "be",  "$s1", "$zero", "done" ], format: "I",  opcode: 0x04, rs: "#2", rt: "#1", imm: "#3"}, 
+
+     { address: <TBD later>, size: 3, line:  9, labels: ["top1" , "top2" ],  
+            command: ["abs",  "$s1", "$s2" ], format: "P",  // < note if this is a load/store, command is better from line source
+            encoding:[ { command: ["sra",  "$at", "$s2", "0x1F"],  encoding: { format: "I", opcode: 0x00, rs: 0x00, rt: 17, rd: 0x01, sh: 0x1F, func: 0x03}},
+                       { command: ["xor",  "$s1", "$at", "$s1" ],  encoding: { format: "R", opcode: 0x00, rs: 1, rt: 17, rd: 17, sh: 0x00, func: 0x26} }, 
+                       { command: ["subu", "$s1", "$s1", "$at" ],  encoding: { format: "R", opcode: 0x00, rs: 17, rt: 1, rd: 17, sh: 0x00, func: 0x23} } ] },
+
+
+     { address: 0x0040 0014, size: 1, line: 11, labels: [],                  
+            command: { "addi","$s1", "$s1",  "-1"},    format: "I",  
+            encoding: {format: "I", opcode: 0x08, rs: 17, rt: 17, imm: -1, sh: 0x00, func: 0x23},
+            }
+
+     { address: 0x0040 0018, size: 1, line: 12, labels: [],
+            command: [ "j",   "$s1", "$zero", "done" ], format: "J",  opcode: 0x02, address: "#1" },
+
+     { address: 0x0040 001c, size: 1, line: 13, labels: ["done"],            
+              command: [ "nop" ],                       format: "S",  code: 0x000000, func: 0x00 } 
+    ]
+   }
+]}
+
+
+
+
+
+// Core-file
+{ program: "sample.asm", memory: 
+  [
+    { segment: ".data", start: 0x0110 0100, size: N, values: [
+        {address: 0x1001 0000, value: N, formats: { binary: "1101111"}}, 
+        {address: 0x1001 0001, value: N, formats: { binary: "1101111"}},
+        {address: 0x1001 0002, value: N, formats: { binary: "1101111"}},
+        {address: 0x1001 0003, value: N, formats: { binary: "1101111"}}  ]
+    },
+    { segment: ".text", start: 0x0101 0000, size: N, values: [
+        {address: 0x0040 0001, value: N, formats: { binary: "1101111"}}, 
+        {address: 0x0040 0002, value: N, formats: { binary: "1101111"}}, 
+        {address: 0x0040 0003, value: N, formats: { binary: "1101111"}}, 
+        {address: 0x0040 0004, value: N, formats: { binary: "1101111"}}, 
+
+      ]
+    }
+  ]
+}
+
+
+
+{ program:  "sample.asm",
+    source:   [ { line: 1, text: " "},
+                { line: 2, text: " "}
+              ],
+    labels:   [  { line:  7, segment: ".text", name: "main", address: null, refs: [] } ]
+    segments: [
+       { segment: ".data", comments: null, declarations: []},
+       { segment: ".text", comments: null, instructions: []} ],
+    ]
+    state: { 
+        memory:   [
+            {segment: ".data", values: [ {address: 0xFFFF,  value: 0xFFFF } ]}
+            {segment: ".data", values: [ {address: 0xFFFF,  value: 0xFFFF } ]}
+        ],
+        CPU: [ ],
+        CO:  [ ],
+        FPU: [ ]
+    }
+}
+
+
+
+        }
+}
+
+
+

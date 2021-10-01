@@ -1,0 +1,53 @@
+Need to have error message state the missing syntax....
+
+Maybe we need to have a synax table with usage.
+  if not found
+      then    "with usage of:   lw s1, A"
+
+ // Register 1: "mfhi $t1", or  "li $t1, 2"
+    // Memory Absolute: "lw $t1, 2"
+    /  op: MNEMONIC __ r1: register imm:next_immediate?     
+                                                            { 
+                                                                var i;
+                                                                ( i = instruction_lookup(op, "register 1") )  || (i = instruction_lookup(op, "memory absolute") );
+                                                                if (! i) instruction_lookup_error(op);
+
+                                                                var cmd;
+                                                                cmd = (imm)? [ op, r1 ] : [ op, r1, imm ];
+
+                                                                return { command : cmd, syntax: i.syntax, type: i.type, encoding: i.encoding };  
+                                                            } 
+
+
+
+==>
+
+
+ // Register 1: "mfhi $t1", or  "li $t1, 2"
+    // Memory Absolute: "lw $t1, 2"
+    /  op: MNEMONIC __ r1: register imm:next_immediate?     
+                                                            { 
+                                                                var cmd;
+                                                                cmd = (imm)? [ op, r1 ] : [ op, r1, imm ];
+
+																var i;
+                                                                ( i = instruction_lookup(op, "register 1") )  || (i = instruction_lookup(op, "memory absolute") );
+                                                                if (! i) instruction_lookup_error(op, cmd);
+
+                                                                return { command : cmd, syntax: i.syntax, type: i.type, encoding: i.encoding };  
+                                                            } 
+
+ instruction_lookup_error(op, cmd)
+
+   cmd can be used re-construct the pattern in the error message.
+
+
+
+Things to do:
+
+1. remove blank lines from the datasctrure
+1. association with actual instructions
+1. location assigment
+
+
+comma's are optional  (so its a comma or whitespace)

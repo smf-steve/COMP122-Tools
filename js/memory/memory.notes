@@ -1,0 +1,71 @@
+memory:
+	- an option to flip memory for easy reading
+		MIPS:  zero is at the bottom
+
+	- A harvard arechitecture should be presented:
+	- it shall contain at least 4 segments: text, data, heap, and stack
+		-- can the current frame be highlighted:  value between sp and fp
+	- visually, a section for the kernel should indicated.
+	- Kernel Segments
+		- This could be highlighted when either a trap or interupt occurs)
+	- Text Segment:
+		A IR, MBR, and a RW bit should be present to highlight the operation of memory
+			- not a write is an indication of self-modifying code
+	- Non-Text Segment
+		A MBR and MAR and a RW bit should be presented to hightlight the operation on memory
+	- The value of the MAR should indicate which segment in which the address is associated:
+		- kernel, text, data, stack, heap , unassigned... 
+		- unassigned is the regien between stack and heap
+		- some care should be given when a value is pushed onto the stack prior to the sp being updated.
+	- specific rows in memory should be hightlight when either a read or write operation is performed
+	- autofocus of memory should occour 
+		- kernel: none
+		- text: at least N instruction above the current valu
+		- data/heap: on the current row as the bottome
+		- stack:
+		- unassigned: in the middle
+
+
+Interface
+	class memory
+	     read_only:  True/False
+	     addressable:  1, 4
+	     mar
+	     mbr
+	     operation: read or write
+	     size : enum (byte, word, half)
+         read(address, size)
+         write(address, size)
+         alimgment_map 1 %1
+         2 %2
+         4 %4
+
+
+
+	instance data
+	instance code
+
+
+	interal values:
+		kernel_begin
+		kernel_end
+		text_begin
+		text_end
+		data_begin
+		data_end
+		stack_begin  
+		// stack_end  <-- handled by SP
+		stack_end
+		heap_begin
+		heap_end
+
+
+	 instructions = new Memory(begin_address,size, read/write)
+	 instructions.
+	 kernel  = instructions.segment(kernel, size, read/write)
+	 text    = instructions.segment(text, size, read/write )
+
+
+Input:  
+    .asm that is very structured (restrictive)
+        # one instruction per line

@@ -1,0 +1,75 @@
+<!-- Copy Starter Template
+https://getbootstrap.com/docs/4.5/getting-started/introduction/
+-->
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- <link rel="stylesheet" href="vendor/multirange/multirange.css"> -->
+
+    <title>COMP 122: Instructional Tools</title>
+  </head>
+
+  <!-- create a stub class just to see how things look -->
+<style>
+    .div_stub {
+      background-color: lightgrey;
+      height: 80px;
+      min-width: 80px;
+    }
+  </style>
+  <body>
+    <h1>This is the initial landing page for the COMP122 Instructional Tools.</h1>
+    <p>As development proceeds, each of the following individual web page provides 
+    <ul>
+      <li><a href="data-segment">Data Segment</a>:
+           Demonstrates how the .data segment values are positioned and aligned in memory</li> 
+      <li><a href="decimal-to-binary">Decimal-to-Binary</a>:
+          Demonstates how to convert a Real Decimal to a Real Binary number</li>
+      <li><a href="floating-point">Floating-Point</a>:
+          Demonstrates how to encode a Real Binary to a IEEE floating pointing</li>
+      <li><a href="frame">Frame</a>:
+          Demonstrates how values are postioned in a subroutine frame on the stack</li>
+      <li>Others?</li>
+    </ul>
+    <h2>Components</h2>
+    <p>This particular webapp will be built around a number of components that are reused. Said components will be build using various vue directives.  Current components include:
+      <li>Register Bank: Using the design of the MIPS archicture.</li>
+      <li>Data Segment: A viewable area of memory</li>
+      <li>Source Code: An editable area for including MIPS assemble code.</li>
+      <li>Data Source: An editable area for including MIPS data directives. 
+          (A subset of the Source code component in which only the .data segments are active.)
+        </li>
+      <li>Memory Configuration: A control panel to adjust the memory layout.</li>
+
+
+   <!-- Footer -->
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- Now add the latest version of Vue -->
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <!-- Now add the Vue scripts for this project                           -->
+    <script src="js/memory.js"></script>                          
+
+    <!-- Now add the styles for this project                                -->  
+    <!-- ToAddress: integrate with better knowledge of bootstrap            -->
+    <!--<link rel="stylesheet" type="text/css" href="css/class-search.css"> -->
+
+
+  </body>
+</html>
