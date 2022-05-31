@@ -36,15 +36,15 @@
 //
 //    ==>
 //      load program into memory
-//      place the aguements of the program onto the stack:  argc, argv, envp
+//      place the arguments of the program onto the stack:  argc, argv, envp
 //
 //      adjust the things to follow the MIPS calling convention
 //        - place argc into a0  # argc is located at 0($sp)
 //        - place argv into a1  # argv is located at 4($sp)
 //        - place envp into a3  # envp is located at 8(sp4) -- but we define the environment to be NULL.
 //      
-//      adjust the value of envp to skip over the positional parameers ($1, $2, $3, etc)
-//        - envp += 4 * argc (four bytes per arguements)
+//      adjust the value of envp to skip over the positional parameters ($1, $2, $3, etc)
+//        - envp += 4 * argc (four bytes per arguments)
 //      call the main program
 //         -- execute main program
 //         -- return from the main program

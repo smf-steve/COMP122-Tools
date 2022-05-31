@@ -1,13 +1,10 @@
 // Filename:    "registers.js"
 // Purpose:     To provide a documented list of all the registers within the MIPS II architecture
-// Description: The registers for the MPS II architecture are defined here.  These data structures are included
-//              in the final JSON output file.  The will constitue part of the "core" file component of the JSON.
-//              It is envisioned that a simulator will access these registers to 
+// Description: The registers for the MIPS II architecture are defined here.  These data structures are included
+//              in the final JSON output file.  The will constitute part of the "core" file component of the JSON.
+//              It is envisioned that a simulator will access these registers. 
 //
-// Status:      Only the CPU registers are defined.
-//              Steps need to be taken to enumerate all of the fpu registers and the co-processor 0
-//
-// Caveats:     Need to deterime the best way to reference the single versus double precission registers
+// Caveats:     Need to determine the best way to reference the single versus double precision registers
 //           
 // Enhancements?:
 //    Consider adding two additional fields to the gp_reisters, "saved", "used"
@@ -78,7 +75,6 @@ const system_registers = [
 
 
 const fpu_registers = [ ];
-
    { name: "$f0",    number:  0, type: "single/double precision floating point", value: 0x00000000, description "return Value #0 from a subroutine, e.g., $f0 = call()"},
    { name: "$f1",    number:  1, type: "double precision floating point", value: 0x00000000, description "paired with $f0 to provide double precision value"},
    { name: "$f2",    number:  2, type: "single/double precision floating point", value: 0x00000000, description "return Value #1 from a subroutine, e.g.,  ($f0, $f2) = call()" },
@@ -120,7 +116,7 @@ const cp0_registers = [
    { name: "BadVAddress", number:  8, type: "", value: 0x00000000, description: ""},
    { name: "Count",       number:  9, type: "", value: 0x00000000, description: "related to the timer"},
    { name: "Compare",     number: 11, type: "", value: 0x00000000, description: "related to the timer"},
-   { name: "Staus",       number: 12, type: "", value: 0x0000ff11, description: ""},   // Status is primed to model MARS
+   { name: "Status",      number: 12, type: "", value: 0x0000ff11, description: ""},   // Status is primed to model MARS
    { name: "Cause",       number: 13, type: "", value: 0x00000000, description: ""},
    { name: "EPC",         number: 14, type: "", value: 0x00000000, description: ""},
 

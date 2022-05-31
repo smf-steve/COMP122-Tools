@@ -7,7 +7,7 @@ Each of the webapps associated with this project are associated with a single pr
 	1. as a memory data structure 
 
 Session Memory also holds a copy of the following data structures:
-	1. the symbol table contain all variables, their source line, and associated addreess/encoding
+	1. the symbol table contain all variables, their source line, and associated address/encoding
 	1. a text_overlay and a data_overlay that provides additional information about the raw values stored in the memory data structure
 
 
@@ -21,22 +21,22 @@ The other webapps associated with this project can then use these representation
 Each of the representations of the source file is stored within a data element within session data. Each of these data elements is specified via JSON.  The following subsections provide the JSON structure for each of the three presentations
 
 ###  Raw Source File
-program   -> { "program": "data.asm", "url": "file://blah/blah/data.asm", lines": [] };
+program   -> { "program": "data.asm", "url": "file://blah/blah/data.asm", "lines": [] };
 lines     -> { "linenumber": 2, "line": "A copy of the actual source line\n" }
 
 
 ### Processed Source File
 The JSON format represents a valid MIPS assemble language program.  The BNF for this format is as follows:
 
-program      -> { "program": "data.asm", "lines": [] };
-lines 
-    -> { "line": N, "segment": ".data", "declarations": [] }
-    -> { "line": N, "segment": ".text", "instructions": [] }
+program  -> { "program": "data.asm", "source": [] };
+source   -> { "line": N, "segment": ".data", "declarations": [] }
+         -> { "line": N, "segment": ".text", "instructions": [] }
 
- declaration
-    -> { "line": N, "label":[], "op": "", "values": [ { "value": N, "count": N} ], "comment": "" }
- instruction
-    -> { "line": N, "label":[], "op": "", "rd": , "rs": , "rt": , "imm":, "comment": "" }
+declaration
+    -> { "line": N, "text": "copy of the actural source line\n", 
+                    "labels":[], "op": "", "values": [ { "value": N, "count": N} ], "comment": "" }
+instruction
+    -> { "line": N, "labels":[], "op": "", "rd": , "rs": , "rt": , "imm":, "comment": "" }
 
 
 ### Memory Data Structure

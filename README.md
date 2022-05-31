@@ -1,8 +1,17 @@
-# COMP122-Tools
-A webapp designed as an instructional aid to learn Computer Architecture and Assemble Languages
+# Assemble Language Tools
+A set of webapps designed as an instructional aid to learn Computer Architecture and Assemble Languages.
 
 ## Summary
-This repository contains a number of dynamic HTML web pages that are designed to illustrate various aspects of Computer Architecture and Assemble Language programing. The primary audience of these web pages are freshman computer science students, who are learning the basics of a ISA (instruction set architecture).  Whenever possible, the material is presented in an architecture neutral way, but note that the MIPS architecture has been used as a the primary assembly language.
+This repository contains a tools that are designed to illustrate various aspects of Computer Architecture and Assemble Language programing. Each of these tools manifest themselves as a collection of dynamic webpages. 
+
+The two core applications contained within this repository is a MIPS assembler and a MIPS simulator. The MIPS assembler creates a JSON file that represents a valid MIPS program along with a rich set of metadata. This metadata also includes the internal machine state associated with the MIPS program. Hence, the JSON file can be used by the MIPS simulator as both its input file and output file.
+
+<insdert image>
+
+
+
+
+The primary audience of these web pages are freshman computer science students, who are learning the basics of a ISA (instruction set architecture).  Whenever possible, the material is presented in an architecture neutral way, but note that the MIPS architecture has been used as a the primary assembly language.
 
 ## Project Goals:
    * to develop a web-based application that simulates a generalized RISC assembly language
@@ -17,6 +26,8 @@ This repository contains a number of dynamic HTML web pages that are designed to
      * the interaction between memory, the ALU and registers
     
 
+
+
 ## Architetural pieces
 Within the application, the following pieces of the micro-architecture are modeled:
 
@@ -27,7 +38,7 @@ Within the application, the following pieces of the micro-architecture are model
    * Register Bank: 32 general purpose registers
 
 ## Web Pages:
-This application is envisioned to be delived via a suit of web pages. All web pages are driven simulatous by the program loaded into the the archtiecture and the interactivity of the user. The web pages that are envisioned to be part of this suite of web pages include:
+This application is envisioned to be delived via a suite of web pages. All web pages are driven simulatous by the program loaded into the the archtiecture and the interactivity of the user. The web pages that are envisioned to be part of this suite of web pages include:
    * Data Segment: Representation of the data segement with the following characterists
      * Memory View Representation: 1x, 2x, 4x, 16x, etc
      * 32-bits versus 64-bit words

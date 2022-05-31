@@ -46,7 +46,7 @@ I don't think I have to retain comments in the processe source...
 // - corresponding Processed Source File
 
 { program: "data.asm", "instructions": [
-  { segement: ".data", "declarations": [
+  { segment: ".data", "declarations": [
     { "line": 12, "label": "",   "op": ".data",   "values": [],                                 "comment": "# Comment String" },
     { "line": 13, "label": "",   "op": "",        "values": [],                                 "comment": "# A blank line" },
     { "line": 14, "label": "",   "op": ".byte",   "values": [ { value: 0, count: 1} ],          "comment": "# Comment String" },
