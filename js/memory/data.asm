@@ -115,7 +115,7 @@ data_overlay ->  { "segment": ".data", "alignment": "on", "wordsize": 4, "endian
 
     // Alignment Slots
 
-    // example of an explicit alignment, not a valid line number should be provided
+    // example of an explicit alignment, note a valid line number should be provided
     //    .align 2   # ensure the next value is aligned on word boundaries 
     //    .float
     //{ "line": 0, "labels": "",  "op": ".align", "size": 3, "byte": 0, "address": TBD },
