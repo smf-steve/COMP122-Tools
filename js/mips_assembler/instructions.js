@@ -1,3 +1,11 @@
+
+Syntax for Data: label	.declaration  values
+  Synax name: list
+
+Note Labels are permitted within Mars on ".text" lines
+But these labes are associated with the previously declared segment
+Hence the parser should yield a warning for such things.
+
 // Filename:    "instructions.js"
 // Purpose:     To define all of the instructions and their corresponding encoding for the MIPS32 
 // Description: The MIPS32 parser rules only checks for syntactic correctness.  As part of the 
@@ -5,7 +13,7 @@
 //				If the instruction, with the utilized syntax, is not found, there is a programming error.
 //
 //              By the addition of new instruction definitions, the ISA can be completed and then extended.
-//              For example new "psuedo" instructions can be defined.
+//              For example new "pseudo" instructions can be defined.
 //
 //              It is also hoped that ARM32 instructions could be added to this table to quickly develop
 //              a parser for that ISA. But this is left for latter.
@@ -59,6 +67,8 @@
 //
 //      The resulting order of instructions is as follows:
 //
+//          list:          		         "op" $1, $2, ..., $n
+//
 //          label indirect 4:          "op $reg4, label3 + imm2 ($reg1)"  
 //          displacement 3:            "op $reg3, label2 + imm1"
 //
@@ -69,18 +79,18 @@
 //  
 //          register 3:                "op $reg3, $reg2, $reg2"
 //          label 3:                   "op $reg3, $reg2, label1"
-//          immedidate 3:              "op $reg3, $reg2, imm1"
+//          immediate 3:               "op $reg3, $reg2, imm1"
 //
 //          label 2:                   "op $reg2, label1"
 //          register 2:                "op $reg2, $reg1"
 //          immediate 2:               "op $reg2, imm1"
 //
-//          register 1:      	       "op $reg1"
+//          register 1:      	         "op $reg1"
 //          immediate 1:               "op imm1"
 //          label 1:                   "op label"
 //  
-//          command:                   "op"
-//
+//          command 0:                 "op"
+// 
 //          null:                      null
 //
 //
@@ -88,35 +98,35 @@
 //      null:   a blank line that provides no instruction.
 //      native: an instruction that is associated with the ISA directly
 //      idiom:  an instruction that is semantically equivalent to native instruction, and is encoded as that native instruction
-//              (for example:  nop is the assembly idiom to perfrom no operation, and it is encoded as "sll $0, $0, 0")
+//              (for example:  nop is the assembly idiom to perform no operation, and it is encoded as "sll $0, $0, 0")
 //              or a convenient representation of a native instruction.  
 //              (for example:  "add $t1, $t2, 5" is an idiom of the native instruction:  "addi $t1, $t2, 5"
 //      pseudo: a system-defined instruction that is replaced by one or more native instructions
-//      macro:  a user-defined instruciton that is replaced by one or more native instructions
+//      macro:  a user-defined instruction that is replaced by one or more native instructions
 //
 //
 // Encoding: A structure "encoding" that provides the encoding based upon the format value.
 //      Instructions Format Types:  "format" : { "R", "I", "J", "S"},
-//          	Register (R) Instructions:  Instructions that perform operations using only registe$rs.
+//          	Register (R) Instructions:  Instructions that perform operations using only registers.
 //          	Immediate (I) Instructions: Instructions that include a 16-bit immediate value
 //          	Jump (J) Instructions: 		Instructions that include a 26-bit address
-//          	Special (S) Instructions: 	Just the "nop" instruction which is classified as a Psuedo Instruction
-//				Register Immediates (RI):   Instructions that perform typical a branch or trap instruction: op:6, rs:5, func:5, offset:16
+//          	Special (S) Instructions: 	Just the "nop" instruction which is classified as a Pseudo Instruction
+//				Register Immediate (RI):   Instructions that perform typical a branch or trap instruction: op:6, rs:5, func:5, offset:16
 //
-//      Commands:  If the instruction type is either pseduo or macro, then "commands" is an array of "{ command, encoding }"
+//      Commands:  If the instruction type is either pseudo or macro, then "commands" is an array of "{ command, encoding }"
 //          where the command is an array of operands associated with the native instruction to be executed (akin to the argv structure)
 //          and   the encoding is the associated encoding for that command as defined via this "encoding" structure
 //         
 //      Operation Code: "opcode" : integer
-//      	    A hexidecimal number that encodes operation associated with the nemonic
+//      	    A hexadecimal number that encodes operation associated with the mnemonic
 //
 //      Code Field: "code" : integer
-//		        A hexidecimal number represent the code field for the special operations: nop, syscall, and break
+//		        A hexadecimal number represent the code field for the special operations: nop, syscall, and break
 //
 //      Registers:  "rs" : { integer | string }, "rt" : { integer | string }, "rd" : { integer | string },
 //              Each field may contain one of two values
-//               	- an hexidecimal value associated the field, e.g., rs: 0x00
-//                   - a string of the form "$N", which indicates which postional parameter of the use$rs instruction is encoded into the associated field.
+//               	- an hexadecimal value associated the field, e.g., rs: 0x00
+//                   - a string of the form "$N", which indicates which positional parameter of the use$rs instruction is encoded into the associated field.
 //			    e.g., given:  "add  $t5, $t6, $t7",	the associated fields are: rs: "%2", rt: "%3", rd: "%1"
 //                   e.g., given:  "addi $t5, $t6, 5",	the associated fields are: rs: "%2", rt: "%1"
 //                   e.g., given:  "lui  $t5, 5",		the associated fields are: rs: 0,    rt: "%1"
@@ -126,14 +136,14 @@
 //		       A number that represents the number of positions to shift
 //		
 //      Immediate Value: "imm" : { integer | string},
-//             A hexidecimal number representing a 16-bit 2's complement number, or 
-//             A string of the form "%N", which indicates which postional parameter of the use$rs instruction is encoded into the associated field.
+//             A hexadecimal number representing a 16-bit 2's complement number, or 
+//             A string of the form "%N", which indicates which positional parameter of the use$rs instruction is encoded into the associated field.
 //
 //      Address Value: "address" : integer
 //      	   A 26-bit value associated with a J-type instruction
 //     
 //      Function: "func": integer
-//	     	   A hexidecimal number that encodes the opeeration associated with the ALU
+//	     	   A hexadecimal number that encodes the operation associated with the ALU
 //
 // Usage: "usage" : string
 //      A sample usage of the command using the appropriate syntax
@@ -158,7 +168,7 @@ function instruction_lookup_error(mnemonic) {
 // The instruction_table contains the relevant instructions that included within the MIPS architecture 
 const instruction_table = [
 
-	// Specical Instructions
+	// Special Instructions
 	// Nop classified as a Psuedo but its encodig matchs "sll $zero, $zero, 0" which is invalid... -- hence making "S"pecial
 	{ unit: "CPU",   classification: "special",       mnemonic: "nop",     syntax: "command", type: "native", encoding: { format: "S", code: 0x000000, func: 0x00 }, usage: "nop",       tac: "nop",                 description: "No Operation (Nop)" },
 	{ unit: "CPU",   classification: "special",       mnemonic: "syscall", syntax: "command", type: "native", encoding: { format: "S", code: 0x000000, func: 0x0c }, usage: "syscall",   tac: "$v0 = code; syscall", description: "System Call: $v0 used to define operaton" },
@@ -397,52 +407,52 @@ const instruction_table = [
 ]
 
 /*
-Other instructions to pu$rsue:  CLO $rd, $rs
+Other instructions to pu$\rsue:  CLO $rd, $rs
 BAL  : Branch and Link  -->  Instruction Type Register Immediate
   Count Leading Ones
 
 OTHER PSUEDO Instructions to be fleshed out
 
-mul rdest, $rsrc1, src2   rd = $rs * rt
-div rdest, $rsrc1, src2   rd = $rs / rt
-divu rdest, $rsrc1, src2  rd = $rs / rt
+mul rdest, src1, src2   rd = $rs * rt
+div rdest, src1, src2   rd = $rs / rt
+divu rdest, src1, src2  rd = $rs / rt
 
-mulo rdest, $rsrc1, src2   rd = $rs * rt   # with overflow
-mulou rdest, $rsrc1, src2  rd = $rs * rt
+mulo rdest, src1, src2   rd = $rs * rt   # with overflow
+mulou rdest, src1, src2  rd = $rs * rt
 
-neg rdest, $rsrc    rd = - $rs   ????
-negu rdest, $rsrc   rd = - $rs
+neg rdest, src    rd = - $rs   ????
+negu rdest, src   rd = - $rs
 
-not rdest, $rsrc   rd = ~ $rs
-rem rdest, $rsrc1, $rsrc2 
-remu rdest, $rsrc1, $rsrc2
+not rdest, src   rd = ~ $rs
+rem rdest, src1, src2 
+remu rdest, src1, src2
 
-rol rdest, $rsrc1, $rsrc2  
-ror rdest, $rsrc1, $rsrc2 
+rol rdest, src1, src2  
+ror rdest, src1, src2 
 
-seq rdest, $rsrc1, $rsrc2    rdest = ( r == t ) ? 1 : 0
-sge rdest, $rsrc1, $rsrc2    rdest = ( r >= t ) ? 1 : 0
-sgeu rdest, $rsrc1, $rsrc2
+seq rdest, src1, src2    rdest = ( r == t ) ? 1 : 0
+sge rdest, src1, src2    rdest = ( r >= t ) ? 1 : 0
+sgeu rdest, src1, src2
 
-sgt rdest, $rsrc1, $rsrc2    rdest = ( r > t ) ? 1 : 0
-sgtu rdest, $rsrc1, $rsrc2
+sgt rdest, src1, src2    rdest = ( r > t ) ? 1 : 0
+sgtu rdest, src1, src2
 
-sle rdest, $rsrc1, $rsrc2    rdest = ( r < t ) ? 1 : 0
-sleu rdest, $rsrc1, $rsrc2
+sle rdest, src1, src2    rdest = ( r < t ) ? 1 : 0
+sleu rdest, src1, src2
 
-sne rdest, $rsrc1, $rsrc2    rdest = ( r != t ) ? 1 : 0
+sne rdest, src1, src2    rdest = ( r != t ) ? 1 : 0
 
 beqz $rsrc, label    if ( r == 0 ) goto label
 bnez $rsrc, label    if ( r != 0 ) goto label
 
 
-Load doubleword
-ld rdest, address pseudoinstruction
+Load double word
+ld rdest, address pseudo instruction
 Load the 64-bit quantity at address into registe$rs rdest and rdest + 1.
 
 
-Store doubleword
-sd $rsrc, address pseudoinstruction
+Store double word
+sd src, address pseudo instruction
 
 
 */
@@ -459,7 +469,7 @@ sd $rsrc, address pseudoinstruction
 
 /* Here are the special mappings for LOAD/STORE commands:
 
-lw $22, int($23) # sytnax: "memory indirect 3"
+lw $22, int($23) # syntax: "memory indirect 3"
     lw $t22, int($23)
 
 lw $22, int    # syntax : "memory absolute <> register 2"  # idiom for lw $t22, 0($23)
