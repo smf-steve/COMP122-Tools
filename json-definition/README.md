@@ -4,7 +4,6 @@ Our MIPS assembler produces a .json file that represents a valid and assembled M
 This specification of this file format is defined via the combination of a BNF 
 
 Program -> 
-```json
 Program -> { "program": null, // A general 
     "timestamp": tag ,
     "entry": "main",
